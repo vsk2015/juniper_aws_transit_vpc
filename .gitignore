@@ -1,3 +1,5 @@
 *.log
 vpclist
 vpclist.bak
+debug_no_aws_transit_vpc_test.py
+debug_no_aws_transit_vpc_test.py_file_logger
