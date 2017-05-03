@@ -33,7 +33,7 @@ def getargs():
     parser.add_option("-c", "--create-spoke-vpc",action="store",type="string",dest="spokevpcstr",help="""Create spokeVPCs.Use format :
 "{'"region"':spokeVPCs No.,'"region"':spokeVPCs No.}". e.g - "{'"us-east-1"':2}" or "{'"us-east-1"':1,'"us-west-1"':2}\"""")
     parser.add_option("-t", "--tag",action="store",type="string",dest="tagstr",help="""Usage  e.g - {'"transitvpc:spoke"':'"true"'}""")
-    parser.add_option("-i", "--interval",action="store",type="int",dest="interval",help="interval in seconds. Usage : -i 20")
+    parser.add_option("-i", "--interval",action="store",type="int",dest="interval",default=1,help="interval in seconds. Usage : -i 20 [Defaul=1]")
     parser.add_option("-n", "--cidr16",action="store",type="string",dest="cidr",help="Change first 2 octets only(10.10.x.x reserved). Usage e.g- 192.168.x.x or 10.2.x.x")
     parser.add_option("-v","--verbose",action="store",type="string",dest="loglevel",help="Usage :  -v debug ")
     parser.add_option("-d", "--del",action="store_true", dest="delete",default=False,help="Delete all VPCs")
@@ -204,10 +204,10 @@ def main ():
                     v-=1
                     fobj = open(pwd+"/vpclist", 'w+')
                     if len(l) > 0:
-                        k=l+listVPC
+                        z=l+listVPC
                     else:
-                        k=listVPC
-                    fobj.write(str(k))
+                        z=listVPC
+                    fobj.write(str(z))
                     fobj.close()
                     if interval !=0 and totalSpoke > 1:
                         cLogger.debug("Will wait for %s seconds before creating next spokeVPC\n",interval)
