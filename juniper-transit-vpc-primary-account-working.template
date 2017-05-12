@@ -168,7 +168,7 @@
         "Description": "Transit VPC: This function is invoked when a generic VPN configuration is placed in an S3 bucket - it converts the generic information into Junos OS specific commands and pushes the config to transit VPC routers.",
         "Runtime": "python2.7",
         "Timeout": "300",
-        "MemorySize": "128"
+        "MemorySize": "512"
       },
       "Poller" : { 
     "CodeLocation" : "juniper-transit-vpc-2/transit-vpc-poller.py",
@@ -783,11 +783,16 @@
             "'EIP2':'",{ "Ref" : "vSRXEip22" },"',",
             "'PIP1':'",{ "Fn::GetAtt" : [ "VpcvSRX1", "PrivateIp" ] },"',",
             "'PIP2':'",{ "Fn::GetAtt" : [ "VpcvSRX2", "PrivateIp" ] },"',",
+			"'PIPGEINT1':'",{ "Fn::GetAtt" : [ "vSRXInterface12", "PrimaryPrivateIpAddress" ] },"',",
+			"'PIPGEINT2':'",{ "Fn::GetAtt" : [ "vSRXInterface22", "PrimaryPrivateIpAddress" ] },"',",
+			"'PUBSUBNET12':'",{ "Ref" : "PubSubnet12" },"',",
+			"'PUBSUBNET22':'",{ "Ref" : "PubSubnet22" },"',",
             "'BGP_ASN':",{ "Ref" : "BgpAsn" },",",
             "'PREFERRED_PATH_TAG':'",{ "Ref" : "PreferredPathTag" },"',",
             "'HUB_TAG':'",{ "Ref" : "SpokeTag" },"',",
             "'HUB_TAG_VALUE':'",{ "Ref" : "SpokeTagValue" },"',",
 			"'TEMPLATE_BUCKET_NAME':'",{ "Ref" : "TemplateBucketName" },"',",
+			"'NETCONF':'","DISABLED","',",
             "'USER_NAME':'",{ "Fn::FindInMap" : [ "Function", "vSRX", "UserName"]},"',",
             "'PRIVATE_KEY':'",{ "Fn::FindInMap" : [ "Function", "vSRX", "PrivateKey"]},"',",
             "'PUBLIC_KEY':'",{ "Fn::GetAtt" : [ "CreateRsaKey", "PubKey" ] },"',",
