@@ -68,6 +68,7 @@ def netconfEnable(ssh):
     prompt(ssh)
     ssh.send('configure\n')
     ssh.send('set system services netconf ssh\n')
+    ssh.send('set system root-authentication encrypted-password "$5$SkeASJkC$lB6ycFLL.2MJRZoMXD42kPLM6Dyx0qpht0yxHrStun6"\n')
     ssh.send('commit and-quit\n')
     time.sleep(30)
     log.info("%s", prompt(ssh))
