@@ -920,7 +920,7 @@
       "Properties" : {
         "GroupDescription" : "Transit VPC Automation Security Group Rules",
         "VpcId" : { "Ref" : "TransitVPC" },
-        "SecurityGroupEgress" : [{ "IpProtocol" : "-1", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }]
+        "SecurityGroupEgress" : [{ "IpProtocol" : "6", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }]
       }
     },
     "SSHtoVSRX": {
@@ -929,6 +929,26 @@
         "IpProtocol": "tcp",
         "FromPort": "22",
         "ToPort": "22",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "VSRXSecurityGroup",
+            "GroupId"
+          ]
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "JuniperConfigSecurityGroup",
+            "GroupId"
+          ]
+        }
+      }
+    },
+	"NETCONFtoVSRX": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties":{
+        "IpProtocol": "tcp",
+        "FromPort": "830",
+        "ToPort": "830",
         "DestinationSecurityGroupId": {
           "Fn::GetAtt": [
             "VSRXSecurityGroup",
