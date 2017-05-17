@@ -61,13 +61,14 @@ def render_template(vpn_status, context, template_read):
             return TEMPLATE_ENVIRONMENT.from_string(template_read).render(context)
                 
 
-def netconfEnable(ssh):
+def netconfEnable(ssh,vsrx_name):
     log.info('Will enable netconf on vSRX')
     ssh.send('cli\n')
     time.sleep(2)
     prompt(ssh)
     ssh.send('configure\n')
     ssh.send('set system services netconf ssh\n')
+    ssh.send('set system host-name {}\n'.format(vsrx_name))
     ssh.send('set system root-authentication encrypted-password "$5$SkeASJkC$lB6ycFLL.2MJRZoMXD42kPLM6Dyx0qpht0yxHrStun6"\n')
     ssh.send('commit and-quit\n')
     time.sleep(30)
@@ -465,10 +466,14 @@ def lambda_handler(event, context):
     log.info("Connected to %s",vsrx_ip)
     ssh = c.invoke_shell()
     log.info("%s",prompt(ssh))
-    if config['NETCONF'] == 'DISABLED':
-        netconfEnable(ssh)
-        config['NETCONF'] = 'ENABLED'
+    if vsrx_name =='VSRX1' and config['NETCONF1'] == 'DISABLED':
+        netconfEnable(ssh,vsrx_name)
+        config['NETCONF1'] = 'ENABLED'
         putTransitConfig(bucket_name, bucket_prefix, endpoint_url[bucket_region], config_file, config)
+    elif vsrx_name =='VSRX2' and config['NETCONF2'] == 'DISABLED':
+        netconfEnable(ssh,vsrx_name)
+        config['NETCONF2'] = 'ENABLED'
+        putTransitConfig(bucket_name, bucket_prefix, endpoint_url[bucket_region], config_file, config)        
     log.info("Creating config.")
     log.info("bucket_name: %s", bucket_name)
     log.info("bucket_key: %s", bucket_key)
